@@ -1,0 +1,19 @@
+.univ_inputs {
+  display: block;
+}
+
+.univ_name,
+.univ_region,
+.univ_rank {
+  display: inline;
+}
+
+.btn {
+  background-color: darkblue;
+  color: white;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: blue;
+}

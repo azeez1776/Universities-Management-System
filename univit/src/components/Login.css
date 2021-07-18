@@ -1,0 +1,26 @@
+.form_user {
+  margin-bottom: 1rem;
+}
+
+.form_pass {
+  margin-bottom: 1rem;
+}
+
+.form_info {
+  display: flex;
+  justify-content: center;
+  vertical-align: middle;
+  position: relative;
+  top: 7rem;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
+  /* width: 12rem; */
+}
+
+.form_btn {
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+}

@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+}
+
+.App {
+  background-color: #a8dadc;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+}
+/* .App {
+  text-align: center;
+  background-color: deeppink;
+} */
+
+/* @media (max-width: 768px) {
+  .App {
+    background-color: white;
+  }
+} */

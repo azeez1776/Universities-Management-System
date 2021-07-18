@@ -1,0 +1,21 @@
+.nav {
+  position: relative;
+  right: 1em;
+  margin-bottom: 2em;
+}
+
+.nav_el > a {
+  /* display: flex; */
+  color: black;
+  text-decoration: none;
+  font-size: 1.4em;
+  padding: 0.5em;
+}
+
+.nav_el > a:hover {
+  /* background-color: grey; */
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+  border: 0 0 1px 0 solid black;
+
+  padding: 0.5em;
+}
