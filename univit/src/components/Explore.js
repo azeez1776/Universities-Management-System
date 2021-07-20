@@ -5,7 +5,8 @@ import 'antd/dist/antd.css';
 import './Explore.css';
 import Loader from './Loader';
 
-const baseUrl = 'http://localhost:5000/api/uni';
+
+const baseUrl = 'http://localhost:5000/api/uni/';
 
 function Explore() {
 
@@ -13,15 +14,20 @@ function Explore() {
     const [loader, setLoader] = useState(false);
 
 
-    const handleDelete = () => {
-        fetch(baseUrl, {
+    const handleDelete = (id) => {
+        fetch(baseUrl + id, {
             method: 'DELETE',
             headers: {
-                'COntent-type': 'application/json'
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true
             },
             body: JSON.stringify()
         })
-            .then(res => res.json())
+            .then(res => {
+                console.log(uni.name);
+                res.json();
+            })
             .catch(err => console.log(err))
 
     }
@@ -51,13 +57,12 @@ function Explore() {
                     return (<Col >
                         <div className="card">
                             {/* {displayUni(uni)} */}
-                            <div key={post.index}>
+                            <div key={post._id}>
                                 <Card hoverable={true} title={post.name} style={{ width: 280, borderRadius: 10 }} >
                                     <p>Mkoa:{post.region}</p>
                                     <p>Nafasi:{post.rank}</p>
-                                    <Button onClick={() => handleDelete()} variant="contained" color="primary">DELETE</Button>
+                                    <Button onClick={() => handleDelete(post._id)} variant="contained" color="secondary">DELETE</Button>
                                 </Card>
-                                {/* console.log(post.name) */}
                             </div>
 
                         </div>
