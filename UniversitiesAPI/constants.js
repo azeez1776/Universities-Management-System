@@ -1,0 +1,3 @@
+module.exports.JWT_OPTIONS = {
+    AUDIENCE: ["SHOW_UNI", "LOGIN", "ADD_UNI", "DELETE_UNI", "UPDATE_UNI"]
+}

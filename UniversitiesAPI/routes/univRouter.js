@@ -1,4 +1,13 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const {
+    getUsernameFromToken,
+    getUserByUsername,
+    generateToken,
+    verifyToken
+} = require("../shared");
+
 
 function routes(Uni) {
     const univRouter = express.Router();
@@ -11,17 +20,28 @@ function routes(Uni) {
             return res.status(201).json(req.body);
         }
         )
-        .get((req, res) => {
-            const query = {};
-            if (req.query.region) {
-                query.region = req.query.region;
-            }
+        .get(verifyToken,(req, res) => {
+            jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+                if(err){
+                    res.status(403).send(err)
+                }else{
 
-            Uni.find(query, (err, values) => {
-                if (err) {
-                    return res.send(err)
-                } else {
-                    return res.json(values);
+                    const query = {};
+                    if (req.query.region) {
+                        query.region = req.query.region;
+                    }
+        
+                    Uni.find(query, (err, values) => {
+                        if (err) {
+                            return res.send(err)
+                        } else {
+                            generateToken(req.token, null).then((token) => {
+                                res.cookie("token", token, {httpOnly:true});
+                                return res.json(values, authData);
+        
+                            })
+                        }
+                    })
                 }
             })
 
@@ -43,12 +63,9 @@ function routes(Uni) {
     })
 
     univRouter.route('/uni/:uniID')
-        .get((req, res) => {
-            return res.json(req.values);
-        })
+        .get((req, res) => res.json(req.values))
         .put((req, res) => {
             const { values } = req.body;
-
             values.name = req.body.name;
             values.region = req.body.region;
             values.rank = req.body.rank;
@@ -58,7 +75,7 @@ function routes(Uni) {
                     res.send(err);
                 }
                 else {
-                    req.values.save((err, value) => {
+                    values.save((err, value) => {
                         if (err) {
                             return res.send(err)
                         }

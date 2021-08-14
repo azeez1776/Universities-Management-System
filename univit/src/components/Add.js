@@ -1,27 +1,11 @@
-import { React, useEffect, useState } from 'react'
+import { React, useState } from 'react'
 import { Card, Col, Row } from 'antd';
 import { useHistory } from 'react-router-dom';
 import './Add.css';
 
+
 function Add() {
 
-
-
-    // const post = () => {
-    //     fetch('http://localhost:5000/api/uni', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify()
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => setAddUni(data))
-    // }
-    // console.log(addUni)
-
-    // useEffect(() => {
-    //    post();
-
-    // }, []);
     const [addUni, setAddUni] = useState({ name: "", region: "", rank: "" });
     const [pending, setPending] = useState(false);
     const history = useHistory();
@@ -44,14 +28,7 @@ function Add() {
                     setPending(false);
                 }, 1000)
             })
-
-
     }
-
-    useEffect(() => {
-
-    }, [])
-
 
     return (
         <div className="Add">

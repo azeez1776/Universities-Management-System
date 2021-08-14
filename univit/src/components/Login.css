@@ -1,9 +1,23 @@
 .form_user {
-  margin-bottom: 1rem;
+  display: flex;
 }
 
 .form_pass {
-  margin-bottom: 1rem;
+  display: flex;
+}
+
+.form_password {
+  position: relative;
+  left: -7px;
+  
+}
+
+.form_username,
+.form_password {
+  position: relative;
+  top: -7px;
+  border:1px solid;
+  border-radius: 1px;
 }
 
 .form_info {
