@@ -5,13 +5,16 @@ const mongoose = require('mongoose');
 const app = express();
 const uniRoute = express.Router();
 const loginRoute = express.Router();
+const logoutRoute = express.Router();
 const bcrypt = require("bcrypt");
 const uni = require('./model/unimodel.js');
 const User = require('./model/usermodel');
 const cookieParser = require('cookie-parser');
 const {
-    generateToken
-} = require('./shared')
+    generateToken,
+    verifyToken
+} = require('./shared');
+const { verify } = require("jsonwebtoken");
 mongoose.connect('mongodb://localhost/UniAPI', function (err) {
     if (err) {
         console.log("error in connection")
@@ -40,6 +43,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api', loginRoute)
+app.use('/api', logoutRoute);
 
 loginRoute.route("/login")
     .post((req, res) => {
@@ -66,6 +70,13 @@ loginRoute.route("/login")
         })
 
     })
+
+    logoutRoute.route('/logout')
+    .get(verifyToken,(req, res) => {
+        res.clearCookie("token");
+        res.status(200).send("Cookies cleared")
+    })
+
 
 
 app.use('/api', univRouter);

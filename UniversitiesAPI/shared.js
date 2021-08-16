@@ -24,22 +24,32 @@ let getUserByUsername = (exports.getUserByUsername = async function (username) {
 });
 
 
-const getUsernameFromToken = function (token) {
-    return jwt.decode(token)["sub"];
-}
+const getUsernameFromToken = (token) => jwt.decode(token)["sub"];
+   
+
+
 
 exports.generateToken = async function (prevToken, username) {
-    const name = username || getUsernameFromToken(prevToken);
-    const user = await getUserByUsername(name);
+    try{
+    const name = await username || getUsernameFromToken(prevToken);
+    // const user = await getUserByUsername(name);
     const options = {
         algorithm: process.env.ALGORITHM,
         expiresIn: process.env.EXPIRY,
         issuer: process.env.ISSUER,
-        subject: username || user.username,
+        subject: username || name,
         audience: Constants.JWT_OPTIONS.AUDIENCE
     }
 
     return jwt.sign({}, process.env.SECRET, options)
+    }
+catch{
+    const name = username || getUsernameFromToken(prevToken);
+    const user = await getUserByUsername("samatar");
+    console.log(user, name)
+    console.log(getUsernameFromToken(prevToken))
+}
+
 }
 
 exports.verifyToken = (req, res, next) => {
@@ -49,7 +59,7 @@ exports.verifyToken = (req, res, next) => {
     } else {
         jwt.verify(token, process.env.SECRET, function (err) {
             if (err) {
-                res.clearCookies("token")
+                res.clearCookie("token")
                 res.status(401).send("Please Login Again")
             }
             else next();

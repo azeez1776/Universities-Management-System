@@ -13,39 +13,37 @@ function routes(Uni) {
     const univRouter = express.Router();
 
     univRouter.route('/uni')
-        .post((req, res) => {
+        .post(verifyToken, (req, res) => {
             const uni = new Uni(req.body);
             req.body = uni;
-            uni.save();
-            return res.status(201).json(req.body);
+            generateToken(req.cookies.token, null).then((token) => {
+                res.cookie("token", token, { httpOnly: true });
+                uni.save();
+                res.status(201).json(req.body);
+            })
         }
         )
-        .get(verifyToken,(req, res) => {
-            jwt.verify(req.token, process.env.SECRET, (err, authData) => {
-                if(err){
-                    res.status(403).send(err)
-                }else{
+        .get(verifyToken, (req, res) => {
+            const query = {};
+            if (req.query.region) {
+                query.region = req.query.region;
+            }
 
-                    const query = {};
-                    if (req.query.region) {
-                        query.region = req.query.region;
-                    }
-        
-                    Uni.find(query, (err, values) => {
-                        if (err) {
-                            return res.send(err)
-                        } else {
-                            generateToken(req.token, null).then((token) => {
-                                res.cookie("token", token, {httpOnly:true});
-                                return res.json(values, authData);
-        
-                            })
-                        }
+            Uni.find(query, (err, values) => {
+                if (err) {
+                    return res.send(err)
+                } else {
+                    generateToken(req.cookies.token, null).then((token) => {
+                        res.cookie("token", token, { httpOnly: true });
+                        res.json(values);
+
                     })
                 }
-            })
+            }
+            )
+        }
+        )
 
-        })
 
     univRouter.use('/uni/:uniID', (req, res, next) => {
         Uni.findById(req.params.uniID, (err, values) => {
@@ -63,28 +61,37 @@ function routes(Uni) {
     })
 
     univRouter.route('/uni/:uniID')
-        .get((req, res) => res.json(req.values))
-        .put((req, res) => {
+        .get(verifyToken, (req, res) => {
+            generateToken(req.cookies.token, null).then((token) => {
+                res.cookie("token", token, { httpOnly: true });
+                res.json(req.values)
+            })
+        })
+        .put(verifyToken, (req, res) => {
             const { values } = req.body;
             values.name = req.body.name;
             values.region = req.body.region;
             values.rank = req.body.rank;
+            generateToken(req.cookies.token, null).then((token) => {
+                res.cookie("token", token, { httpOnly: true });
+                req.values.save((err, values) => {
+                    if (err) {
+                        res.send(err);
+                    }
+                    else {
+                        values.save((err, value) => {
+                            if (err) {
+                                return res.send(err)
+                            }
+                            return res.json(value)
+                        })
+                    }
+                })
 
-            req.values.save((err, values) => {
-                if (err) {
-                    res.send(err);
-                }
-                else {
-                    values.save((err, value) => {
-                        if (err) {
-                            return res.send(err)
-                        }
-                        return res.json(value)
-                    })
-                }
+
             })
         })
-        .patch((res, req) => {
+        .patch(verifyToken, (res, req) => {
             const { values } = req.body;
 
             if (req.body._id) {
@@ -96,22 +103,27 @@ function routes(Uni) {
                 const value = item[1];
 
                 values[key] = value;
-
-                req.values.save(err => {
-                    if (err) {
-                        return res.send(err);
-                    }
-                    return res.json(values);
+                generateToken(req.cookies.token, null).then(token => {
+                    res.cookie("token", token, { httpOnly: true })
+                    req.values.save(err => {
+                        if (err) {
+                            return res.send(err);
+                        }
+                        return res.json(values);
+                    })
                 })
             })
         })
-        .delete((req, res) => {
-            req.values.remove(err => {
-                if (err) {
-                    res.send(err);
-                }
-                return res.sendStatus(204);
-            });
+        .delete(verifyToken, (req, res) => {
+            generateToken(req.cookies.token, null).then(token => {
+                res.send("token", token, {httpOnly:true})
+                req.values.remove(err => {
+                    if (err) {
+                        res.send(err);
+                    }
+                    return res.sendStatus(204);
+                });
+            })
         })
 
     return univRouter;
