@@ -17,7 +17,7 @@ function Login() {
     let history = useHistory();
     const handleChange = (e) => {
         e.preventDefault()
-        fetch('http://localhost:5000/api/login', {
+        fetch('/api/login', {
             method: 'POST',
             header: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: name, password: pass })

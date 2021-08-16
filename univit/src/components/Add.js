@@ -15,7 +15,7 @@ function Add() {
         setPending(true)
 
         e.preventDefault();
-        fetch('http://localhost:5000/api/uni', {
+        fetch('/api/uni', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(addUni)

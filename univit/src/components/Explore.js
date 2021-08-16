@@ -7,7 +7,7 @@ import Loader from './Loader';
 import { useHistory } from 'react-router';
 
 
-const baseUrl = 'http://localhost:5000/api/uni/';
+const baseUrl = '/api/uni/';
 
 function Explore() {
 

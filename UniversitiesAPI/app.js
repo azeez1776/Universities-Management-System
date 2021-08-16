@@ -1,6 +1,6 @@
 require("dotenv").config({ path: "./variables.env" })
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const uniRoute = express.Router();
@@ -26,15 +26,15 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-var corsOptions = {
-    optionsSuccessStatus: 200
-}
+// var corsOptions = {
+//     optionsSuccessStatus: 200
+// }
 
 const port = process.env.PORT || 3000;
 
 const univRouter = require('./routes/univRouter')(uni);
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 
 
