@@ -1,33 +1,52 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Nav.css';
 import { Row, Col } from 'antd';
-import { Link } from 'react-router-dom';
+import { LoginContext } from '../Helper/Context'
+import { Link, useHistory } from 'react-router-dom';
+
 
 function Nav() {
     const linkStyle = {
         color: "black"
     }
-    return (
-        <div className="nav">
-            <Row gutter={[16, 16]} justify="end">
-                <Col>
-                    <div className="nav_el">
-                        <a><Link className="navLink" to='/Add'>Add University</Link></a>
-                    </div>
-                </Col>
-                <Col>
-                    <div className="nav_el">
-                        <a><Link className="navLink" to='/Explore'>Explore</Link></a>
-                    </div>
-                </Col>
-                <Col>
-                    <div className="nav_el">
-                        <a><Link className="navLink" to='/'>Log Out</Link></a>
-                    </div>
-                </Col>
-            </Row>
 
-        </div>
+    const history = useHistory();
+    const { loggedIn, setLoggedIn } = useContext(LoginContext)
+
+
+    const logout = async function () {
+        try {
+            const res = await fetch('/api/logout');
+            const data = res.status === 200 ? history.push('/') : res.json();
+            return data;
+        }
+        catch (err) {
+            console.log("Something wrong", err)
+        }
+    }
+
+    return (
+        (loggedIn &&
+            <div className="nav">
+                <Row gutter={[16, 16]} justify="end">
+                    <Col>
+                        <div className="nav_el">
+                            <a><Link className="navLink" to='/Add'>Add University</Link></a>
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className="nav_el">
+                            <a><Link className="navLink" to='/Explore'>Explore</Link></a>
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className="nav_el">
+                            <a><Link className="navLink" onClick={logout} to='/'>Log Out</Link></a>
+                        </div>
+                    </Col>
+                </Row>
+
+            </div>)
     )
 }
 

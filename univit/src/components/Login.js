@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
+import React, { useState, useContext } from 'react';
 import './Login.css';
 import Button from '@material-ui/core/Button';
 import { Row, Col, Card } from 'antd';
 import 'antd/dist/antd.css';
-import { useHistory } from 'react-router';
-import { StylesProvider } from '@material-ui/styles';
+import { useHistory } from 'react-router-dom';
+import { LoginContext } from '../Helper/Context'
 
 
 
@@ -13,19 +12,27 @@ function Login() {
     const [name, setName] = useState("");
     const [pass, setPass] = useState("");
     const [error, setError] = useState("");
+    const { loggedIn, setLoggedIn } = useContext(LoginContext)
 
     let history = useHistory();
     const handleChange = (e) => {
         e.preventDefault()
         fetch('/api/login', {
             method: 'POST',
-            header: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: name, password: pass })
-        }).then(res => (res.status === 200) ? console.log("good"): res.json())
+        }).then(res => {
+            if (res.status === 200) {
+                setLoggedIn(true)
+                history.push('/Explore')
+            } else {
+                res.json()
+            }
+        })
             .then(data => data.message ? setError(data.message) : null)
             .catch(err => console.log("error logging in", err))
-        }
-        console.log(error || "ops")
+    }
+    console.log(error)
     return (
         <div className="form">
             <form onSubmit={handleChange}>

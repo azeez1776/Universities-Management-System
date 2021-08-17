@@ -61,19 +61,14 @@ function routes(Uni) {
     })
 
     univRouter.route('/uni/:uniID')
-        .get(verifyToken, (req, res) => {
-            generateToken(req.cookies.token, null).then((token) => {
-                res.cookie("token", token, { httpOnly: true });
+        .get((req, res) => {
                 res.json(req.values)
             })
-        })
-        .put(verifyToken, (req, res) => {
+        .put( (req, res) => {
             const { values } = req.body;
             values.name = req.body.name;
             values.region = req.body.region;
             values.rank = req.body.rank;
-            generateToken(req.cookies.token, null).then((token) => {
-                res.cookie("token", token, { httpOnly: true });
                 req.values.save((err, values) => {
                     if (err) {
                         res.send(err);
@@ -90,8 +85,7 @@ function routes(Uni) {
 
 
             })
-        })
-        .patch(verifyToken, (res, req) => {
+        .patch((res, req) => {
             const { values } = req.body;
 
             if (req.body._id) {
@@ -103,8 +97,6 @@ function routes(Uni) {
                 const value = item[1];
 
                 values[key] = value;
-                generateToken(req.cookies.token, null).then(token => {
-                    res.cookie("token", token, { httpOnly: true })
                     req.values.save(err => {
                         if (err) {
                             return res.send(err);
@@ -113,18 +105,14 @@ function routes(Uni) {
                     })
                 })
             })
-        })
-        .delete(verifyToken, (req, res) => {
-            generateToken(req.cookies.token, null).then(token => {
-                res.send("token", token, {httpOnly:true})
+        .delete((req, res) => {
                 req.values.remove(err => {
                     if (err) {
                         res.send(err);
                     }
-                    return res.sendStatus(204);
+                    return res.sendStatus(200);
                 });
             })
-        })
 
     return univRouter;
 }

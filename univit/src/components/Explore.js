@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import 'antd/dist/antd.css';
 import './Explore.css';
 import Loader from './Loader';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 
 const baseUrl = '/api/uni/';
@@ -59,6 +59,7 @@ function Explore() {
             })
             .catch((err) => {
                 console.log(err);
+                history.push('/')
             });
     }, [uni]);
 

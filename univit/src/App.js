@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useContext } from 'react';
 import { Helmet } from 'react-helmet';
-
+import { LoginContext } from './Helper/Context'
 import './App.css';
 import {
   HashRouter,
@@ -20,12 +20,13 @@ const preloader = () => (
 const TITLE = "UMS";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const loading = () => <Loader />
 
   return (
     <div className="App">
-      <>
+      <LoginContext.Provider value={{ loggedIn, setLoggedIn }} >
         <Helmet>
           <title>{TITLE}</title>
         </Helmet>
@@ -54,7 +55,7 @@ function App() {
             </Switch>
           </Suspense>
         </HashRouter>
-      </>
+      </LoginContext.Provider>
     </div>
   );
 }
