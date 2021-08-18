@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Universities-Management-System/static/css/main.7392f21a.chunk.css",
+    "main.js": "/Universities-Management-System/static/js/main.4a081d92.chunk.js",
+    "main.js.map": "/Universities-Management-System/static/js/main.4a081d92.chunk.js.map",
+    "runtime-main.js": "/Universities-Management-System/static/js/runtime-main.fc3e7a6b.js",
+    "runtime-main.js.map": "/Universities-Management-System/static/js/runtime-main.fc3e7a6b.js.map",
+    "static/css/2.b4e56faa.chunk.css": "/Universities-Management-System/static/css/2.b4e56faa.chunk.css",
+    "static/js/2.9d5566a9.chunk.js": "/Universities-Management-System/static/js/2.9d5566a9.chunk.js",
+    "static/js/2.9d5566a9.chunk.js.map": "/Universities-Management-System/static/js/2.9d5566a9.chunk.js.map",
+    "static/js/3.e523e1ff.chunk.js": "/Universities-Management-System/static/js/3.e523e1ff.chunk.js",
+    "static/js/3.e523e1ff.chunk.js.map": "/Universities-Management-System/static/js/3.e523e1ff.chunk.js.map",
+    "index.html": "/Universities-Management-System/index.html",
+    "static/css/2.b4e56faa.chunk.css.map": "/Universities-Management-System/static/css/2.b4e56faa.chunk.css.map",
+    "static/css/main.7392f21a.chunk.css.map": "/Universities-Management-System/static/css/main.7392f21a.chunk.css.map",
+    "static/js/2.9d5566a9.chunk.js.LICENSE.txt": "/Universities-Management-System/static/js/2.9d5566a9.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fc3e7a6b.js",
+    "static/css/2.b4e56faa.chunk.css",
+    "static/js/2.9d5566a9.chunk.js",
+    "static/css/main.7392f21a.chunk.css",
+    "static/js/main.4a081d92.chunk.js"
+  ]
+}
