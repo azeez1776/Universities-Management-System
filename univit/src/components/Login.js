@@ -27,36 +27,28 @@ function Login() {
                 message.success('Logged In')
                 history.push('/Explore')
             } else {
-                res.json()
+               return res.json()
             }
         })
             .then(data => {
-                if (data.message) {
-                    setError(data.message)
+                if (data) {
+                    message.error(data.message)
                 } else {
+                    setError(data)
+                    console.log(data)
                     return null
                 }
             })
             .catch(err => console.log("error logging in", err))
     }
-    console.log(error)
     return (
         <div className="form">
             <form onSubmit={handleChange}>
                 <div className="form_info">
-                    <Row gutter={[16, 16]}>
-
-                        <Col span={24}  >
+                <Row style={{ margin: 0 }} align="middle" justify="center" gutter={[16, 16]}>
+                        <Col >
                             <Card style={{ width: 300, borderRadius: 10 }}>
                                 <h1>Login</h1>
-
-                                {/* <div className="form_user">
-                                    <TextField id="form_user" label="username" variant="outlined" />
-                                </div>
-
-                                <div className="form_pass">
-                                    <TextField id="form_password" label="password" variant="outlined" />
-                                </div> */}
                                 <div className="form_user">
                                     <label for="username">Username: </label>
                                     <input type="text" className="form_username" style={{ margin: 5 }} value={name} onChange={(e) => setName(e.target.value)} /><br />
@@ -68,10 +60,10 @@ function Login() {
                                 <div className="form_btn">
                                     <Button type="submit" variant="contained" color="primary" >
                                         Login
-                            </Button>
-                                    <p><b>{error}</b></p>
+                                    </Button>
                                 </div>
                             </Card>
+                                    {/* <p style={{color:"red"}}><b>{error}</b></p> */}
                         </Col>
                     </Row>
                 </div>

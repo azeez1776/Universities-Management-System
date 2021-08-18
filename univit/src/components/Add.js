@@ -1,5 +1,5 @@
 import { React, useState } from 'react'
-import { Card, Col, Row } from 'antd';
+import { Card, Col, message, Row } from 'antd';
 import { useHistory } from 'react-router-dom';
 import './Add.css';
 
@@ -21,12 +21,18 @@ function Add() {
             body: JSON.stringify(addUni)
         })
             .then(response => {
-                setTimeout(() => {
+                if(response.status===201){
 
-                    response.json();
-                    history.push('/Explore');
-                    setPending(false);
-                }, 1000)
+                    setTimeout(() => {
+                        response.json();
+                        history.push('/Explore');
+                        setPending(false);
+                    }, 1000)
+                    message.success("University Added")
+                }else{
+                    message.error("Not authorised");
+                    history.push('/');
+                }
             }).catch(err => {
                 console.log("Error in the issue", err)
             })

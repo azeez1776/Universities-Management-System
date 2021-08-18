@@ -54,7 +54,7 @@ loginRoute.route("/login")
                 username.comparePassword(password, function (err, isMatch) {
                     if (err) throw err;
                     if (!isMatch) {
-                        res.send("bad")
+                        res.send({message:"bad"})
                     }
                     else {
                         generateToken(null, "samatar").then((token) => {
@@ -65,7 +65,7 @@ loginRoute.route("/login")
                 })
             }
             else {
-                res.send("user not available")
+                res.status(401).send({message:"user not available"});
             }
         })
 
