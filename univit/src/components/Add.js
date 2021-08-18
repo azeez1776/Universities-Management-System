@@ -27,6 +27,8 @@ function Add() {
                     history.push('/Explore');
                     setPending(false);
                 }, 1000)
+            }).catch(err => {
+                console.log("Error in the issue", err)
             })
     }
 

@@ -29,7 +29,13 @@ function Login() {
                 res.json()
             }
         })
-            .then(data => data.message ? setError(data.message) : null)
+            .then(data => {
+                if (data.message) {
+                    setError(data.message)
+                } else {
+                    return null
+                }
+            })
             .catch(err => console.log("error logging in", err))
     }
     console.log(error)

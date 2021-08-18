@@ -1,9 +1,10 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { Row, Col, Card } from 'antd';
 import Button from '@material-ui/core/Button';
 import 'antd/dist/antd.css';
 import './Explore.css';
 import Loader from './Loader';
+import {LoginContext} from '../Helper/Context';
 import { useHistory } from 'react-router-dom';
 
 
@@ -14,6 +15,7 @@ function Explore() {
     const [uni, setUni] = useState([]);
     const [loader, setLoader] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const {loggedIn, setLoggedIn} = useContext(LoginContext);
 
     const history = useHistory();
 
@@ -59,6 +61,7 @@ function Explore() {
             })
             .catch((err) => {
                 console.log(err);
+                setLoggedIn(false)
                 history.push('/')
             });
     }, [uni]);
