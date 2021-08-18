@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import './Nav.css';
-import { Row, Col } from 'antd';
+import { Row, Col, message } from 'antd';
 import { LoginContext } from '../Helper/Context'
 import { Link, useHistory } from 'react-router-dom';
 
@@ -20,6 +20,7 @@ function Nav() {
 
             if (res.status === 200) {
                 setLoggedIn(false)
+                message.info("Logged out")
                 history.push('/')
             } else {
                 return res.json()

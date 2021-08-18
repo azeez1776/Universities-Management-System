@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './Login.css';
 import Button from '@material-ui/core/Button';
-import { Row, Col, Card } from 'antd';
+import { Row, Col, Card, message } from 'antd';
 import 'antd/dist/antd.css';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../Helper/Context'
@@ -24,6 +24,7 @@ function Login() {
         }).then(res => {
             if (res.status === 200) {
                 setLoggedIn(true)
+                message.success('Logged In')
                 history.push('/Explore')
             } else {
                 res.json()
