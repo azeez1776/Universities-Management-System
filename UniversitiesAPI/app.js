@@ -54,7 +54,7 @@ loginRoute.route("/login")
                 username.comparePassword(password, function (err, isMatch) {
                     if (err) throw err;
                     if (!isMatch) {
-                        res.send({message:"bad"})
+                        res.status(401).send({message:"wrong password"})
                     }
                     else {
                         generateToken(null, "samatar").then((token) => {
