@@ -59,7 +59,7 @@ function Explore() {
                     setUni(data);
                 }, 500)
             })
-            .catch((err) => {
+            .catch((err) => { 
                 console.log(err);
                 setLoggedIn(false)
                 history.push('/')

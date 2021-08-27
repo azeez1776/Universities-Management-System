@@ -1,12 +1,29 @@
 const mongoose = require('mongoose');
 
-const { Schema } = mongoose;
+const  Schema  = mongoose.Schema;
 
 const unimodel = new Schema(
     {
-        name: { type: String },
-        region: { type: String },
-        rank: { type: Number }
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'users'
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        region: {
+            type: String,
+            required: true
+        },
+        rank: {
+            type: Number,
+            required: true
+        },
+        date: {
+            type: Date,
+            default: Date.now()
+        },
     }
 );
 

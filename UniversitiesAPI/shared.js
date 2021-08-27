@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const Constants = require("./constants");
 const bcrypt = require("bcrypt");
 const User = require("./model/usermodel");
+const Uni = require("./model/unimodel")
 
 
 let getUserByUsername = (exports.getUserByUsername = async function (username) {
@@ -10,11 +11,11 @@ let getUserByUsername = (exports.getUserByUsername = async function (username) {
         // const filteredUserArray = allUsers.filter(
         //     (user) => user.username === username
         // );
-        User.findOne({username:username}, function(err, usern){
-            if(err){
+        User.findOne({ username: username }, function (err, usern) {
+            if (err) {
                 console.log("Error reading users: ", err)
             }
-            else{
+            else {
                 return usern.getUsername()
             }
         })
@@ -25,37 +26,41 @@ let getUserByUsername = (exports.getUserByUsername = async function (username) {
 
 
 const getUsernameFromToken = (token) => jwt.decode(token)["sub"];
-   
-
 
 
 exports.generateToken = async function (prevToken, username) {
-    try{
-    const name = await username || getUsernameFromToken(prevToken);
-    // const user = await getUserByUsername(name);
-    const options = {
-        algorithm: process.env.ALGORITHM,
-        expiresIn: process.env.EXPIRY,
-        issuer: process.env.ISSUER,
-        subject: username || name,
-        audience: Constants.JWT_OPTIONS.AUDIENCE
+    try {
+        const name = await username || getUsernameFromToken(prevToken);
+
+      
+
+        const options = {
+            algorithm: process.env.ALGORITHM,
+            expiresIn: process.env.EXPIRY,
+            issuer: process.env.ISSUER,
+            subject: username || name,
+            audience: Constants.JWT_OPTIONS.AUDIENCE
+        }
+
+        return jwt.sign({}, process.env.SECRET, options)
+    }
+    catch(err) {
+        console.log(err)
     }
 
-    return jwt.sign({}, process.env.SECRET, options)
-    }
-catch{
-    const name = username || getUsernameFromToken(prevToken);
-    const user = await getUserByUsername("samatar");
-    console.log(user, name)
-    console.log(getUsernameFromToken(prevToken))
 }
 
+exports.passUserId = (req, res, next) => {
+    const token = req.cookies.token;
+    req.user = jwt.verify(token, process.env.SECRET).user;
+    next();
 }
 
 exports.verifyToken = (req, res, next) => {
+    try{
     const token = req.cookies.token;
     if (!token) {
-        res.status(401).send("Not authorised to view") 
+        res.status(401).send("Not authorised to view")
     } else {
         jwt.verify(token, process.env.SECRET, function (err) {
             if (err) {
@@ -66,15 +71,9 @@ exports.verifyToken = (req, res, next) => {
         })
     }
 }
+catch(error){
+    res.status(500).send("Token expired")
+}
+}
 
-// exports.verifyToken = function(req, res, next){
-//     const bearerHeader = req.headers['authorization'];
-//     if(typeof bearerHeader !== 'undefined'){
-//         const bearerToken = bearerHeader.split(' ')[1];
-//         req.token = bearerToken;
-//         next()
-//     }
-//     else{
-//         res.status(403).send("opium")
-//     }
-// }
+

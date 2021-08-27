@@ -1,7 +1,9 @@
 require("dotenv").config({ path: "./variables.env" })
 const express = require('express');
+const Constants = require('./constants')
 // const cors = require('cors');
 const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken")
 const app = express();
 const uniRoute = express.Router();
 const loginRoute = express.Router();
@@ -15,11 +17,13 @@ const {
     verifyToken
 } = require('./shared');
 const { verify } = require("jsonwebtoken");
-mongoose.connect('mongodb://localhost/UniAPI', function (err) {
+mongoose.connect('mongodb+srv://samatar:1776USA@samatar.43ebf.mongodb.net/Samatar?retryWrites=true&w=majority', function (err) {
     if (err) {
         console.log("error in connection")
     }
-    console.log("Mongo connected")
+    else {
+        console.log("Mongo connected")
+    }
 });
 
 app.use(cookieParser());
@@ -47,32 +51,66 @@ app.use('/api', logoutRoute);
 
 loginRoute.route("/login")
     .post((req, res) => {
+        
         let uname = req.body.username
         let password = req.body.password
-        User.findOne({ username: 'samatar' }, function (err, username) {
-            if (username.checkUser(uname)) {
-                username.comparePassword(password, function (err, isMatch) {
-                    if (err) throw err;
-                    if (!isMatch) {
-                        res.status(401).send({message:"wrong password"})
-                    }
-                    else {
-                        generateToken(null, "samatar").then((token) => {
-                            res.cookie("token", token, { httpOnly: true });
-                            res.status(200).send({ username: username })
-                        })
-                    }
-                })
-            }
-            else {
-                res.status(401).send({message:"user not available"});
-            }
-        })
+        User.findOne({ username: uname }, function (err, username) {
+            try {
+                if (username.checkUser(uname)) {
+                    username.comparePassword(password, function (err, isMatch) {
+                        if (err) throw err;
+                        if (!isMatch) {
+                            res.status(401).send({ message: "wrong password" })
+                        }
+                        else {
+                            const options = {
+                                algorithm: process.env.ALGORITHM,
+                                expiresIn: process.env.EXPIRY,
+                                issuer: process.env.ISSUER,
+                                subject: uname,
+                                audience: Constants.JWT_OPTIONS.AUDIENCE
+                            }
 
-    })
+                            const payload = {
+                                user: {
+                                    id: username.id
+                                }
+                            };
 
-    logoutRoute.route('/logout')
-    .get(verifyToken,(req, res) => {
+                            jwt.sign(
+                                payload,
+                                process.env.SECRET,
+                                options,
+                                (err, token) => {
+                                    if (err) throw err;
+                                    else {
+                                        res.cookie("token", token, { httpOnly: true });
+                                        res.status(200).send(username)
+                                    }
+                                }
+                            )
+                            // generateToken(null, uname).then((token) => {
+                            //     res.cookie("token", token, { httpOnly: true });
+                            //     res.status(200).send({ username:username })
+                            // })
+
+                        }
+                    })
+                }
+                else {
+                    res.status(401).send({ message: "user not available" });
+                }
+            }
+            catch(err){
+                res.status(500).send("Server Error")
+            }
+    }
+
+    )}
+    )
+
+logoutRoute.route('/logout')
+    .get(verifyToken, (req, res) => {
         res.clearCookie("token");
         res.status(200).send("Cookies cleared")
     })
